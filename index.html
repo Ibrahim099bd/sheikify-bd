@@ -11,13 +11,14 @@ h1{text-align:center;color:#b36b00}
 img{width:100%;border-radius:10px}
 .btn{display:block;background:#25D366;color:white;text-align:center;padding:15px;margin:20px 0;text-decoration:none;font-size:18px;border-radius:8px}
 .box{background:white;padding:15px;border-radius:10px;margin-top:15px;box-shadow:0 0 10px rgba(0,0,0,0.1)}
+input,select,textarea{width:100%;padding:10px;margin-top:10px;border-radius:6px;border:1px solid #ccc}
 </style>
 </head>
 <body>
 <div class="container">
 <h1>🍯 Sheikify BD খাঁটি মধু</h1>
 
-<img src="https://ibb.co.com/JWQp4PFD="Honey">
+<img src="YOUR_IMAGE_URL_HERE" alt="Honey">
 
 <div class="box">
 <h2>🔥 ১০০% খাঁটি ও প্রাকৃতিক মধু</h2>
@@ -29,11 +30,30 @@ img{width:100%;border-radius:10px}
 
 <div class="box">
 <h2>💰 দাম</h2>
-<p><b>৫৫০ টাকা (প্রতি কেজি)</b></p>
-<p>🚚 সারা বাংলাদেশে ডেলিভারি</p>
+<p><b>৫৫০ টাকা (প্রতি বোতল)</b></p>
+<p>🚚 সারা বাংলাদেশে ডেলিভারি (Cash on Delivery)</p>
 </div>
 
-<a class="btn" href="https://wa.me/8801985356608">📲 WhatsApp-এ অর্ডার করুন</a>
+<div class="box">
+<h2>📝 অর্ডার ফর্ম</h2>
+<form onsubmit="sendOrder(event)">
+<input type="text" id="name" placeholder="আপনার নাম" required>
+<input type="tel" id="phone" placeholder="ফোন নাম্বার" required>
+<textarea id="address" placeholder="ঠিকানা" required></textarea>
+
+<label>পরিমাণ নির্বাচন করুন:</label>
+<select id="qty" onchange="updatePrice()">
+<option value="1">১ কেজি</option>
+<option value="2">২ বেজি</option>
+<option value="3">৩ কজি</option>
+<option value="5">৫ কেজি</option>
+</select>
+
+<p id="total">মোট: ৫৫০ টাকা</p>
+
+<button class="btn" type="submit">📦 অর্ডার কনফার্ম করুন</button>
+</form>
+</div>
 
 <div class="box">
 <h2>⭐ কাস্টমার রিভিউ</h2>
@@ -42,5 +62,41 @@ img{width:100%;border-radius:10px}
 </div>
 
 </div>
-</body>
-</html>
+
+<script>
+function updatePrice(){
+  let qty = document.getElementById('qty').value;
+  let total = qty * 550;
+  document.getElementById('total').innerText = 'মোট: ' + total + ' টাকা';
+}
+
+function sendOrder(e){
+  e.preventDefault();
+
+  let name = document.getElementById('name').value;
+  let phone = document.getElementById('phone').value;
+  let address = document.getElementById('address').value;
+  let qty = document.getElementById('qty').value;
+  let total = qty * 550;
+  let trx = document.getElementById('trx') ? document.getElementById('trx').value : "";
+
+  // ✅ Google Sheet এ ডাটা পাঠানো
+  fetch("https://script.google.com/macros/s/AKfycbzTcVgcPPboSnNLaq7p1zRz9eNhk9HU0wS9VIeGMFbH-xEXR8YUeN9wHaEXu_-NzhW0/exec", {
+    method: "POST",
+    body: JSON.stringify({
+      name: name,
+      phone: phone,
+      address: address,
+      qty: qty,
+      total: total,
+      trx: trx
+    })
+  })
+  .then(res => alert("✅ অর্ডার সফলভাবে সাবমিট হয়েছে!"))
+  .catch(err => alert("❌ সমস্যা হয়েছে, আবার চেষ্টা করুন"));
+
+  // ✅ WhatsApp backup (optional কিন্তু ভালো)
+  let msg = `নাম: ${name}%0Aফোন: ${phone}%0Aঠিকানা: ${address}%0Aপরিমাণ: ${qty}%0Aমোট: ${total} টাকা`;
+  window.open(`https://wa.me/8801985356608?text=${msg}`,'_blank');
+}
+</script>
