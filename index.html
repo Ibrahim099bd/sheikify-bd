@@ -8,67 +8,85 @@
 body{font-family:sans-serif;margin:0;background:#fff7e6;color:#333}
 .container{max-width:600px;margin:auto;padding:15px}
 h1{text-align:center;color:#b36b00}
+.brand{text-align:center;font-weight:bold;margin-bottom:10px}
 img{width:100%;border-radius:10px}
 .btn{display:block;background:#25D366;color:white;text-align:center;padding:15px;margin:20px 0;text-decoration:none;font-size:18px;border-radius:8px}
-.box{background:white;padding:15px;border-radius:10px;margin-top:15px;box-shadow:0 0 10px rgba(0,0,0,0.1)}
+.box{background:white;padding:15px;border-radius:12px;margin-top:15px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
 input,select,textarea{width:100%;padding:10px;margin-top:10px;border-radius:6px;border:1px solid #ccc}
+.badge{background:#e6ffe6;padding:8px;border-radius:6px;margin-top:10px}
 </style>
 </head>
 <body>
 <div class="container">
-<h1>🍯 Sheikify BD খাঁটি মধু</h1>
+
+<h1>🍯 Sheikify BD</h1>
+<p class="brand">১০০% খাঁটি সুন্দরবনের মধু</p>
 
 <img src="YOUR_IMAGE_URL_HERE" alt="Honey">
 
 <div class="box">
-<h2>🔥 ১০০% খাঁটি ও প্রাকৃতিক মধু</h2>
-<p>✔️ কোনো ভেজাল নেই<br>
-✔️ সরাসরি সংগ্রহ<br>
-✔️ রোগ প্রতিরোধ ক্ষমতা বাড়াতে সহায়ক<br>
-✔️ ঠান্ডা-কাশিতে উপকারী</p>
+<h2>🔥 কেন আমাদের মধু?</h2>
+<p>✔️ সম্পূর্ণ প্রাকৃতিক ও ভেজালমুক্ত<br>
+✔️ সরাসরি মৌয়াল থেকে সংগ্রহ<br>
+✔️ স্বাস্থ্য ভালো রাখতে সহায়ক</p>
+<div class="badge">🚚 Cash on Delivery | সারা বাংলাদেশে ডেলিভারি</div>
 </div>
 
 <div class="box">
 <h2>💰 দাম</h2>
-<p><b>৫৫০ টাকা (প্রতি বোতল)</b></p>
-<p>🚚 সারা বাংলাদেশে ডেলিভারি (Cash on Delivery)</p>
+<p><b>৫৫০ টাকা (প্রতি কেজি)</b></p>
+<p>🚚 ডেলিভারি: প্রথম ২ কেজি = ১৩০ টাকা, এরপর প্রতি কেজি +২০ টাকা</p>
 </div>
 
 <div class="box">
-<h2>📝 অর্ডার ফর্ম</h2>
+<h2>📝 অর্ডার করুন</h2>
 <form onsubmit="sendOrder(event)">
 <input type="text" id="name" placeholder="আপনার নাম" required>
 <input type="tel" id="phone" placeholder="ফোন নাম্বার" required>
-<textarea id="address" placeholder="ঠিকানা" required></textarea>
+<textarea id="address" placeholder="সম্পূর্ণ ঠিকানা" required></textarea>
 
-<label>পরিমাণ নির্বাচন করুন:</label>
+<label>পরিমাণ (কেজি):</label>
 <select id="qty" onchange="updatePrice()">
 <option value="1">১ কেজি</option>
-<option value="2">২ বেজি</option>
-<option value="3">৩ কজি</option>
+<option value="2">২ কেজি</option>
+<option value="3">৩ কেজি</option>
+<option value="4">৪ কেজি</option>
 <option value="5">৫ কেজি</option>
 </select>
+
 <p id="total">মোট: ৫৫০ টাকা</p>
-<label>💳 Payment (bKash/Nagad):</label>
-<input type="text" id="trx" placeholder="Transaction ID লিখুন (optional)">
+
+<label>💳 Payment (optional)</label>
+<input type="text" id="trx" placeholder="Transaction ID (যদি আগে পেমেন্ট করেন)">
 <p>bKash/Nagad: 01985356608</p>
+
 <button class="btn" type="submit">📦 অর্ডার কনফার্ম করুন</button>
 </form>
 </div>
 
 <div class="box">
 <h2>⭐ কাস্টমার রিভিউ</h2>
-<p>"একদম আসল মধু!"</p>
-<p>"খুব ভালো কোয়ালিটি"</p>
+<p>"একদম আসল মধু! আবার নিবো"</p>
 </div>
 
 </div>
 
 <script>
+function calculateTotal(qty){
+  let product = qty * 550;
+  let delivery = 130;
+
+  if(qty > 2){
+    delivery += (qty - 2) * 20;
+  }
+
+  return {product, delivery, total: product + delivery};
+}
+
 function updatePrice(){
-  let qty = document.getElementById('qty').value;
-  let total = qty * 550;
-  document.getElementById('total').innerText = 'মোট: ' + total + ' টাকা';
+  let qty = parseInt(document.getElementById('qty').value);
+  let calc = calculateTotal(qty);
+  document.getElementById('total').innerText = `পণ্য: ${calc.product} + ডেলিভারি: ${calc.delivery} = মোট: ${calc.total} টাকা`;
 }
 
 function sendOrder(e){
@@ -77,27 +95,26 @@ function sendOrder(e){
   let name = document.getElementById('name').value;
   let phone = document.getElementById('phone').value;
   let address = document.getElementById('address').value;
-  let qty = document.getElementById('qty').value;
-  let total = qty * 550;
-  let trx = document.getElementById('trx') ? document.getElementById('trx').value : "";
+  let qty = parseInt(document.getElementById('qty').value);
+  let trx = document.getElementById('trx').value;
 
-  // ✅ Google Sheet এ ডাটা পাঠানো
+  let calc = calculateTotal(qty);
+
   fetch("https://script.google.com/macros/s/AKfycbzTcVgcPPboSnNLaq7p1zRz9eNhk9HU0wS9VIeGMFbH-xEXR8YUeN9wHaEXu_-NzhW0/exec", {
     method: "POST",
     body: JSON.stringify({
-      name: name,
-      phone: phone,
-      address: address,
-      qty: qty,
-      total: total,
-      trx: trx
+      name,
+      phone,
+      address,
+      qty,
+      total: calc.total,
+      trx
     })
   })
-  .then(res => alert("✅ অর্ডার সফলভাবে সাবমিট হয়েছে!"))
-  .catch(err => alert("❌ সমস্যা হয়েছে, আবার চেষ্টা করুন"));
-
-  // ✅ WhatsApp backup (optional কিন্তু ভালো)
-  let msg = `নাম: ${name}%0Aফোন: ${phone}%0Aঠিকানা: ${address}%0Aপরিমাণ: ${qty}%0Aমোট: ${total} টাকা`;
-  window.open(`https://wa.me/8801985356608?text=${msg}`,'_blank');
+  .then(res => alert("✅ অর্ডার সাবমিট হয়েছে!"))
+  .catch(err => alert("❌ সমস্যা হয়েছে"));
 }
 </script>
+
+</body>
+</html>
