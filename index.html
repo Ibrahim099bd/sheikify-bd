@@ -97,7 +97,7 @@ form input,form textarea,form select{width:100%;padding:14px;margin-top:12px;bor
 <h2>❓ সাধারণ প্রশ্ন</h2>
 <div class="faq">
 <b>ডেলিভারি কত দিনে?</b><br>
- ১-২ দিন।
+ঢাকার ভিতরে ১-২ দিন এবং ঢাকার বাইরে ২-৪ দিন।
 </div>
 <div class="faq">
 <b>পেমেন্ট কিভাবে করবো?</b><br>
@@ -153,22 +153,26 @@ let trx = document.getElementById('trx').value;
 let calc = calculateTotal(qty);
 
 fetch("https://script.google.com/macros/s/AKfycbzTcVgcPPboSnNLaq7p1zRz9eNhk9HU0wS9VIeGMFbH-xEXR8YUeN9wHaEXu_-NzhW0/exec", {
-method:"POST",
-body:JSON.stringify({
-name:name,
-phone:phone,
-address:address,
-qty:qty,
-total:calc.total,
-trx:trx
+method: "POST",
+mode: "no-cors",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+name: name,
+phone: phone,
+address: address,
+qty: qty,
+total: calc.total,
+trx: trx
 })
 })
-.then(res => {
+.then(() => {
 alert("✅ অর্ডার সফলভাবে গ্রহণ করা হয়েছে!");
 document.querySelector('form').reset();
 updatePrice();
 })
-.catch(err => {
+.catch(() => {
 alert("❌ সমস্যা হয়েছে। আবার চেষ্টা করুন");
 });
 }
